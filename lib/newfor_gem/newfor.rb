@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require "bindata"
 require "newfor_gem/string"
 require "newfor_gem/mappings"
@@ -73,8 +74,14 @@ module NewforGem
         when 24
           sub_hash['code'] = "clear"
         when 15
+          if is_packet_26?
+            @packet_chrs = create_packet_26_array
+            rows_ = rows.drop(1)
+          else
+            rows_ = rows
+          end
           sub_hash['code'] = "build"
-          sub_hash['rows'] = process_row_data(rows, codepage)
+          sub_hash['rows'] = process_row_data(rows_, codepage)
         when 16
           sub_hash['code'] = "reveal"
         when 14
@@ -84,45 +91,37 @@ module NewforGem
       end
       sub_hash
     end
-    
+
     def process_row_data(lines, codepage)
       a = Array.new
       lines.each do |line|
         str = line.text.trim_padding
-        if codepage == "DE"
-          a << german_mapping(str)
-        else
-          a << str
+        case codepage
+          when "DE"
+            a << mapping(str, GERMAN)
+          when "ES"
+            a << mapping(str, SPANISH)
+          else
+            a << str
         end
       end
       a
     end
 
-    def spanish_mapping(str)
-      spanish_string = ""
+    def mapping(str, language)
+      string = ""
       str.each_byte do |c|
-        unless SPANISH[c].empty?
-          spanish_string << SPANISH[c]
+        if c == 160
+          string << @packet_chrs.pop
           next
-        end
-        if c == "\x0a"
-          spanish_string << P26[c]
-        end
-        spanish_string << c
-      end
-      spanish_string
-    end
-
-    def german_mapping(str)
-      german_string = ""
-      str.each_byte do |c|
-        unless GERMAN[c].empty?
-          german_string << GERMAN[c]
+        elsif ! language[c].empty?
+          string << language[c]
           next
+        else
+          string << c
         end
-        german_string << c
       end
-      german_string
+      string
     end
     
   end

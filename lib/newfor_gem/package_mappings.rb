@@ -5,5 +5,6 @@ module PackageMappings
 
   P26[189] = "Ñ"
   P26[109] = "Ñ"
+  P26[209] = "#"
 
 end

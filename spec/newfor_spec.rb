@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# -*- encoding: utf-8 -*-
 require "json"
 require "newfor_gem"
 require "newfor_gem/newfor"

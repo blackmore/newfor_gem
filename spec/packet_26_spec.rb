@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# -*- encoding: utf-8 -*-
 require "json"
 require 'newfor_gem'
 require "newfor_gem/newfor"
@@ -46,21 +46,16 @@ describe NewforGem do
     obj.create_packet_26_array.last.should eql ("Ñ")
   end
 
-  it "should do something" do
+  it "should drop the first row if packet 26" do
     obj = NewforGem::Newfor.read(PACKET_26)
-    obj.should eql (12)
+    obj.rows.length.should eql 2
+    obj.rows = obj.rows.drop(1)
+    obj.rows.length.should eql 1
   end
 
-
-
-  # it "should return a json string of the build data" do
-  #   json_str = NewforGem.to_json(BUILD)
-  #   json_str.to_json.should =~ /\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"1abcdefghijklmnopqrstuvwxyz\",\"2ABCDEFGHIJKLMNOPQRSTUVWXYZ.\"\]\}/
-  # end
-  
-  # it "should return 'SKIP'" do
-  #   json_str = NewforGem.to_json(BROKEN)
-  #   json_str.to_json.should =~ /\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"skip\"\}/
-  # end  
+  it "should return a correct Spanish string" do
+    obj = NewforGem::Newfor.read(PACKET_26)
+    obj.clean("ES").to_json.should =~ /"rows\":\[\"S14 Ñ Ñ #.\"\]}/
+  end
   
 end
