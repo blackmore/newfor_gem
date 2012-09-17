@@ -45,8 +45,14 @@ module NewforGem
       arr = []
       push_to_chr_list.reverse.each do |p26_block|
         num = p26_block[1]
-        arr << P26[num]
+        if P26[num]
+          arr << P26[num]
+        else
+          arr << "missing - #{num}"
+        end
+
       end
+      puts arr
       arr
     end
 
