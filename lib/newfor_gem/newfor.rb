@@ -21,39 +21,9 @@ module NewforGem
       case subtitle_info.value
         when 12 then 2
         when 71 then 1
+        when 27 then 3
         else 1
       end
-    end
-
-    def is_packet_26?
-      rows[0].row_info.include? "\x0c"
-    end
-
-    def slice_packet_data
-      rows[0].text.slice(4, 36)
-    end
-
-    def push_to_chr_list
-      chr_array = []
-      slice_packet_data.each_byte do |c|
-        chr_array << c
-      end
-      chr_array.each_slice(3).to_a
-    end
-
-    def create_packet_26_array
-      arr = []
-      push_to_chr_list.reverse.each do |p26_block|
-        num = p26_block[1]
-        if P26[num]
-          arr << P26[num]
-        else
-          arr << "missing - #{num}"
-        end
-
-      end
-      puts arr
-      arr
     end
 
     def is_connect_disconnect_data?
@@ -69,25 +39,51 @@ module NewforGem
     end
 
     def is_clear_data?
-      code == 24        # \x18
+      code == 24
+    end
+
+    def is_packet_26?
+      rows[0].row_info.include? "\x0c"
+    end
+
+    def slice_packet_data
+      rows[0].text.slice(4, 36)
+    end
+
+    def character_list
+      chr_array = []
+      slice_packet_data.each_byte do |c|
+        chr_array << c
+      end
+      chr_array.each_slice(3).to_a
+    end
+
+    def create_packet26_array
+      @packet26_array = []
+      character_list.reverse.each do |p26_block|
+        num = p26_block[1]
+        if P26[num]
+          @packet26_array << P26[num]
+        else
+          @packet26_array << ""
+        end
+      end
+      @rows = rows.drop(1)
     end
     
     def clean(codepage)
-      sub_hash = Hash.new
+      sub_hash = {}
+      @rows = rows
       t = Time.now
       sub_hash['timestamp'] = t.strftime("%H:%M:%S:%3N")
+
       case code.value
         when 24
           sub_hash['code'] = "clear"
-        when 15
-          if is_packet_26?
-            @packet_chrs = create_packet_26_array
-            rows_ = rows.drop(1)
-          else
-            rows_ = rows
-          end
+        when 15        
+          create_packet26_array if is_packet_26?
           sub_hash['code'] = "build"
-          sub_hash['rows'] = process_row_data(rows_, codepage)
+          sub_hash['rows'] = process_row_data(@rows, codepage)
         when 16
           sub_hash['code'] = "reveal"
         when 14
@@ -99,26 +95,26 @@ module NewforGem
     end
 
     def process_row_data(lines, codepage)
-      a = Array.new
+      arr = Array.new
       lines.each do |line|
         str = line.text.trim_padding
         case codepage
           when "DE"
-            a << mapping(str, GERMAN)
+            arr << mapping(str, GERMAN)
           when "ES"
-            a << mapping(str, SPANISH)
+            arr << mapping(str, SPANISH)
           else
-            a << str
+            arr << str
         end
       end
-      a
+      arr
     end
 
     def mapping(str, language)
       string = ""
       str.each_byte do |c|
         if c == 160
-          string << @packet_chrs.pop
+          string << @packet26_array.pop if ! @packet26_array.empty?
           next
         elsif ! language[c].empty?
           string << language[c]
