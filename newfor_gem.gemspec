@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["nigel@blackmore.de"]
   gem.description   = %q{Very basic parser for NEWFOR Subtitle streams from wincaps}
   gem.summary       = %q{Very basic parser for NEWFOR Subtitle streams from wincaps}
-  gem.homepage      = ""
+  gem.homepage      = "http://rubygems.org/gems/newfor_gem"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
