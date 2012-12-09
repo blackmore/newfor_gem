@@ -1,20 +1,14 @@
 # NewforGem
 
-TODO: Write a gem description
-
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'newfor_gem'
+    gem 'newfor_gem', :git => 'https://github.com/blackmore/newfor_gem.git'
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install newfor_gem
 
 ## Usage
 
