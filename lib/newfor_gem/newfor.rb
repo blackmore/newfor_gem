@@ -5,6 +5,23 @@ require "newfor_gem/mappings"
 require "newfor_gem/package_mappings"
 
 module NewforGem
+
+  def self.ensure_odd_parity(data)
+    none_parity = ""
+    binary_array = data.unpack('B*')[0].scan(/.{8}/)
+    # odd parity check
+    binary_array.each do |byte|
+      if byte.sum.odd?
+        # correct first byte error checking
+        corrected_byte = byte.sub(/^./, "0")
+        none_parity << [corrected_byte].pack('B*')
+      else
+        none_parity << [byte].pack('B*')
+      end
+    end
+    none_parity
+  end 
+
   class Newfor < BinData::Record
     include Mappings
     include PackageMappings
