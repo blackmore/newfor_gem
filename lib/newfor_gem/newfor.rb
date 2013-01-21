@@ -39,6 +39,7 @@ module NewforGem
         when 12 then 2
         when 71 then 1
         when 27 then 3
+        when 73 then 2
         else 1
       end
     end
