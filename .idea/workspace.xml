@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="adf1a943-6729-4f29-8b4e-f2515b940691" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/newfor_gem/mappings.rb" afterPath="$PROJECT_DIR$/lib/newfor_gem/mappings.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/newfor_gem/newfor.rb" afterPath="$PROJECT_DIR$/lib/newfor_gem/newfor.rb" />
     </list>
     <ignored path="newfor_gem.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -21,7 +20,26 @@
     <disable_hints />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="mappings.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/newfor_gem/mappings.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="34" column="12" selection-start="2324" selection-end="2324" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="newfor.rb" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/newfor_gem/newfor.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="126" column="60" selection-start="2857" selection-end="2857" vertical-scroll-proportion="0.963548">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -29,8 +47,8 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/lib/newfor_gem/mappings.rb" />
         <option value="$PROJECT_DIR$/lib/newfor_gem/newfor.rb" />
+        <option value="$PROJECT_DIR$/lib/newfor_gem/mappings.rb" />
       </list>
     </option>
   </component>
@@ -155,13 +173,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-4" width="1857" height="983" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2498615" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2498615" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
@@ -229,23 +247,23 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/newfor_gem/newfor.rb">
+    <entry file="file://$PROJECT_DIR$/lib/newfor_gem.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="60" selection-start="2857" selection-end="2857" vertical-scroll-proportion="1.9295261">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/newfor_gem/mappings.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="114" selection-start="2319" selection-end="2319" vertical-scroll-proportion="0.63791007">
+        <state line="34" column="12" selection-start="2324" selection-end="2324" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/newfor_gem.rb">
+    <entry file="file://$PROJECT_DIR$/lib/newfor_gem/newfor.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="126" column="60" selection-start="2857" selection-end="2857" vertical-scroll-proportion="0.963548">
           <folding />
         </state>
       </provider>
