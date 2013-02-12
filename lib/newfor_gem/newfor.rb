@@ -121,6 +121,8 @@ module NewforGem
             arr << mapping(str, GERMAN)
           when "ES"
             arr << mapping(str, SPANISH)
+          when "GB"
+            arr << mapping(str, BRITISH)
           else
             arr << str
         end
