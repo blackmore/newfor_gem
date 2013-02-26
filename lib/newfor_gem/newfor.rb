@@ -1,30 +1,15 @@
 # -*- encoding: utf-8 -*-
 require "bindata"
+require "newfor_gem/newfor"
 require "newfor_gem/string"
 require "newfor_gem/mappings"
-require "newfor_gem/package_mappings"
+require "newfor_gem/packet26"
+require "newfor_gem/package26_mappings"
 
-module NewforGem
-
-  def self.ensure_odd_parity(data)
-    none_parity = ""
-    binary_array = data.unpack('B*')[0].scan(/.{8}/)
-    # odd parity check
-    binary_array.each do |byte|
-      if byte.sum.odd?
-        # correct first byte error checking
-        corrected_byte = byte.sub(/^./, "0")
-        none_parity << [corrected_byte].pack('B*')
-      else
-        none_parity << [byte].pack('B*')
-      end
-    end
-    none_parity
-  end 
-
+module NewforGem 
+  
   class Newfor < BinData::Record
     include Mappings
-    include PackageMappings
     
     uint8 :code
     uint8 :subtitle_info, :onlyif => :is_build_data?
@@ -77,15 +62,8 @@ module NewforGem
     end
 
     def create_packet26_array
-      @packet26_array = []
-      character_list.reverse.each do |p26_block|
-        num = p26_block[1]
-        if P26[num]
-          @packet26_array << P26[num]
-        else
-          @packet26_array << ""
-        end
-      end
+      obj = Packet26.read(rows[0].text)
+      @packet26_array = obj.special_chars
       @rows = rows.drop(1)
     end
     
@@ -113,7 +91,7 @@ module NewforGem
     end
 
     def process_row_data(lines, codepage)
-      arr = Array.new
+      arr = []
       lines.each do |line|
         str = line.text.trim_padding
         case codepage
@@ -121,8 +99,6 @@ module NewforGem
             arr << mapping(str, GERMAN)
           when "ES"
             arr << mapping(str, SPANISH)
-          when "GB"
-            arr << mapping(str, BRITISH)
           else
             arr << str
         end

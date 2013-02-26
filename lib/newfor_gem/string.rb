@@ -9,8 +9,8 @@ class String
     self.gsub!(/\x0A*/, '')
     self.remove_color_tags
   end
-  
-  def remove_color_tags   #Standard colours two bytes
+
+  def remove_color_tags
     self.gsub!(/\x0D./, '')
     self
   end

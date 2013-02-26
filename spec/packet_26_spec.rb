@@ -1,13 +1,11 @@
 # -*- encoding: utf-8 -*-
+require 'minitest/spec'
+require 'minitest/autorun'
+
 require "json"
-require 'newfor_gem'
-require "newfor_gem/newfor"
-require "newfor_gem/package_mappings"
+require "newfor_gem"
 
 describe NewforGem do
-  include PackageMappings
-  
-  ES_PKT_26           = "\x0f\x0c\x02\x0c\x15\x53\x93\x80\xb2\x41\x2a\x3d\x3d\x26\x4a\xbd\x56\x54\x3d\x37\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x49\x0d\x07\x0b\x0b\x53\x31\x20\x31\x32\x34\x33\x34\x35\x36\x37\x38\x39\x39\x30\x27\x40\x20\xa0\xa0\xa0\x21\x22\xa0\x24\x25\x26\x2f\x28\x29\x3d\x3f\x60\x21\x0a\x0a"
   ES_PKT_S2           = "\x0f\x47\x02\x49\x20\x0d\x07\x0b\x0b\x53\x32\x20\x71\x77\x65\x72\x74\x79\x75\x69\x6f\x70\x61\x73\x64\x66\x67\x68\x6a\x6b\x6c\x7c\x7a\x78\x63\x76\x62\x6e\x6d\x0a\x0a\x20\x20\x20"  
   ES_PKT_S3           = "\x0f\x0c\x02\x0c\x15\x53\x93\x80\x5f\xd1\xce\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x49\x20\x0d\x07\x0b\x0b\x53\x33\x20\x51\x57\x45\x52\x54\x59\x55\x49\x4f\x50\x41\x53\x44\x46\x47\x48\x4a\x4b\x4c\xa0\x5a\x58\x43\x56\x42\x4e\x4d\x0a\x0a\x20\x20\x20"
   ES_PKT_S4           = "\x0f\x0c\x02\x0c\x15\x53\x93\x80\x34\xbd\x50\x5a\x6d\xc3\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x49\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x53\x34\x20\x3c\x3e\x2c\x3b\x2e\x3a\x2d\xa0\x2a\x23\xa0\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
@@ -15,57 +13,27 @@ describe NewforGem do
 
   it "should return the number of rows" do
     obj = NewforGem::Newfor.read(PACKET_26)
-    obj.number_of_rows.should == 2
+    obj.number_of_rows.must_equal 2
   end
 
-  it "should return the number of rows" do
-    obj = NewforGem::Newfor.read(ES_PKT_TWO_LINES)
-    obj.number_of_rows.should == 3
-  end
- 
-  it "should return true for packet_26" do
-    obj = NewforGem::Newfor.read(PACKET_26)
-    obj.is_packet_26?.should == true
-  end
- 
-  it "should not be packet_26" do
-    obj = NewforGem::Newfor.read(BUILD)
-    obj.is_packet_26?.should == false
-  end
- 
-  it "trim packed data to eql 36 bytes" do
-    obj = NewforGem::Newfor.read(PACKET_26)
-    obj.slice_packet_data.length.should equal(36) 
-  end
- 
-    it "should split packet26 into 12" do
-    obj = NewforGem::Newfor.read(PACKET_26)
-    obj.character_list.length.should eql(12)
-  end
- 
-  it "Test mapping to find €" do
-    P26[189].should eql ("€")
-  end
- 
-  it "should drop the first row if packet 26" do
-    obj = NewforGem::Newfor.read(PACKET_26)
-    obj.rows.length.should eql 2
-    obj.rows = obj.rows.drop(1)
-    obj.rows.length.should eql 1
-  end
- 
   it 'should return S2 qwertyuiopasdfghjklñzxcvbnm' do
     obj = NewforGem::Newfor.read(ES_PKT_S2)
-    obj.clean("ES").to_json.should =~ /\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"S2 qwertyuiopasdfghjklñzxcvbnm\"\]\}/ 
+    obj.clean("ES").to_json.must_match(/\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"S2 qwertyuiopasdfghjklñzxcvbnm\"\]\}/ )
   end
  
+  it "must return the special char" do 
+    obj = NewforGem::Newfor.read(ES_PKT_S3)
+    chr_array = Packet26.read(obj.rows[0].text)
+    chr_array.special_chars.must_equal ["Ñ"]
+  end
+
   it 'should return S3 QWERTYUIOPASDFGHJKLÑZXCVBNM' do
     obj = NewforGem::Newfor.read(ES_PKT_S3)
-    obj.clean("ES").to_json.should =~ /\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"S3 QWERTYUIOPASDFGHJKLÑZXCVBNM\"\]\}/ 
+    obj.clean("ES").to_json.must_match(/\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"S3 QWERTYUIOPASDFGHJKLÑZXCVBNM\"\]\}/ )
   end
 
   it 'should return Two lines' do
     obj = NewforGem::Newfor.read(ES_PKT_TWO_LINES)
-    obj.clean("ES").to_json.should =~ /\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"Kjhadfgjklhadklfg kajdfgkjahd\",\"fgklha dfklgjhakdljf gkjadfÇÑ€.\"\]\}/ 
+    obj.clean("ES").to_json.must_match(/\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"Kjhadfgjklhadklfg kajdfgkjahd\",\"fgklha dfklgjhakdljf gkjadfÇÑ€.\"\]\}/ )
   end
 end
