@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 require "newfor_gem/package26_mappings"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

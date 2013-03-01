@@ -17,7 +17,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "bindata"
 
-  gem.add_development_dependency "rspec", "~> 2.6"
   gem.add_development_dependency "json_pure"
   gem.add_development_dependency "rake"
 
