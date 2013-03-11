@@ -12,7 +12,6 @@ require "newfor_gem/package26_mappings"
 
 class Packet26 < BinData::Record
   include Packet26Mappings
-
 	uint8  :framing
 	string :magazine, :read_length => 2
 	uint8  :designation

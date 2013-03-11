@@ -40,7 +40,10 @@ describe "character mapping" do
   M_CHR2 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x12\xbd\xf1\x15\xbd\x71\x21\xbd\xf1\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x61\x61\x61\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
   M_CHR3 = "\x0f\x0c\x02\x0c\x15\x53\x93\x80\x5f\xd1\xce\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x49\x20\x0d\x07\x0b\x0b\x53\x33\x20\x51\x57\x45\x52\x54\x59\x55\x49\x4f\x50\x41\x53\x44\x46\x47\x48\x4a\x4b\x4c\xa0\x5a\x58\x43\x56\x42\x4e\x4d\x0a\x0a\x20\x20\x20"
   M_CHR4 = "\x0f\x1b\x02\x0c\x15\x79\x93\x00\x77\x6d\xc3\x09\xd2\xce\x05\xbe\xd6\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x64\x0d\x07\x0b\x0b\x4b\x6a\x68\x61\x64\x66\x67\x6a\x6b\x6c\x68\x61\x64\x6b\x6c\x66\x67\x20\x6b\x61\x6a\x64\x66\x67\x6b\x6a\x61\x68\x64\x0a\x0a\x20\x20\x20\x20\x20\x02\x38\x0d\x07\x0b\x0b\x66\x67\x6b\x6c\x68\x61\x20\x64\x66\x6b\x6c\x67\x6a\x68\x61\x6b\x64\x6c\x6a\x66\x20\x67\x6b\x6a\x61\x64\x66\xa0\xa0\xa0\x2e\x0a\x0a\x20\x20\x20"
-
+  TEST_1 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x4d\xbd\xd6\x59\xbd\xf1\x5c\x61\xc9\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x74\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\x45\x61\x49\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20"
+  TEST_2 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x4d\xbd\xd6\x59\xbd\xf1\x5c\x61\xc9\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x74\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\xa0\xa0\xa0\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20"
+  TEST_a = "\x3c\x07\x54\x2c\xc1\x1e\xb8\xac\x6f\x20\x8f\x0b\x08\x00\x45\x00\x00\x7e\xed\xf6\x40\x00\x80\x06\xf5\x12\x0a\x01\x01\xa7\x0a\x01\x01\xc8\x07\x78\x07\xd5\x5c\x28\x3c\xad\x02\xd0\x5c\xa6\x50\x18\xff\xff\x17\xe1\x00\x00\x0f\x0c\x02\x0c\x15\x79\x93\x00\x4d\xbd\xd6\x59\xbd\xf1\x5c\x61\xc9\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x74\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\x45\x61\x49\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20"
+  TEST_b = "\x3c\x07\x54\x2c\xc1\x1e\xb8\xac\x6f\x20\x8f\x0b\x08\x00\x45\x00\x00\x7e\xed\xc4\x40\x00\x80\x06\xf5\x44\x0a\x01\x01\xa7\x0a\x01\x01\xc8\x07\x77\x07\xd5\xa6\x4f\x4f\x6d\x6d\x5d\xc7\x52\x50\x18\xff\xff\x17\xe1\x00\x00\x0f\x0c\x02\x0c\x15\x79\x93\x00\x4d\xbd\xd6\x59\xbd\xf1\x5c\x61\xc9\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x74\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\xa0\xa0\xa0\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   Use below to find the modifier and character number of a new
@@ -59,118 +62,95 @@ describe "character mapping" do
 #  end
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  def convert_to_special_chars(str)
+    obj = NewforGem::Newfor.read(str)
+    Packet26.read(obj.rows[0].text).special_chars
+  end
 
   it "must return the letter Ï" do
-    obj = NewforGem::Newfor.read(Chr_15)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Ï"]
+    convert_to_special_chars(Chr_15).must_equal ["Ï"]
   end
  
   it "must return the letter Ü" do
-    obj = NewforGem::Newfor.read(Chr_25)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Ü"]
+    convert_to_special_chars(Chr_25).must_equal ["Ü"]
   end
  
   it "must return the letter Ô" do
-    obj = NewforGem::Newfor.read(Chr_17)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Ô"]
+    convert_to_special_chars(Chr_17).must_equal ["Ô"]
   end
  
   it "must return the letter Û" do
-    obj = NewforGem::Newfor.read(Chr_23)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Û"]
+    convert_to_special_chars(Chr_23).must_equal ["Û"]
   end
  
   it "must return the letter Î" do
-    obj = NewforGem::Newfor.read(Chr_13)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Î"]
+    convert_to_special_chars(Chr_13).must_equal ["Î"]
   end
  
   it "must return the letter Â" do
-    obj = NewforGem::Newfor.read(Chr_3)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Â"]
+    convert_to_special_chars(Chr_3).must_equal ["Â"]
   end
  
   it "must return the letter À" do
-    obj = NewforGem::Newfor.read(Chr_1)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["À"]
+    convert_to_special_chars(Chr_1).must_equal ["À"]
   end
  
   it "must return the letter È" do
-    obj = NewforGem::Newfor.read(Chr_11)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["È"]
+    convert_to_special_chars(Chr_11).must_equal ["È"]
   end
  
   it "must return the letter Ù" do
-    obj = NewforGem::Newfor.read(Chr_21)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Ù"]
+    convert_to_special_chars(Chr_21).must_equal ["Ù"]
   end
  
   it "must return the letter É" do
-    obj = NewforGem::Newfor.read(Chr_9)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["É"]
+    convert_to_special_chars(Chr_9).must_equal ["É"]
   end
  
   it "must return the letter Æ" do
-    obj = NewforGem::Newfor.read(Chr_5)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Æ"]
+    convert_to_special_chars(Chr_5).must_equal ["Æ"]
   end
  
   it "must return the letter æ" do
-    obj = NewforGem::Newfor.read(Chr_6)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["æ"]
+    convert_to_special_chars(Chr_6).must_equal ["æ"]
   end
  
   it "must return the letter Ç" do
-    obj = NewforGem::Newfor.read(Chr_7)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Ç"]
+    convert_to_special_chars(Chr_7).must_equal ["Ç"]
   end
 
   it "must return the letter Œ" do
-    obj = NewforGem::Newfor.read(Chr_19)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Œ"]
+    convert_to_special_chars(Chr_19).must_equal ["Œ"]
   end
  
   it "must return the letter œ" do
-    obj = NewforGem::Newfor.read(Chr_20)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["œ"]
+    convert_to_special_chars(Chr_20).must_equal ["œ"]
   end
  
   it "must return €€€" do
-    obj = NewforGem::Newfor.read(M_CHR1)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["€", "€", "€"]
+    convert_to_special_chars(M_CHR1).must_equal ["€", "€", "€"]
   end
  
   it "must return æ æ æ" do
-    obj = NewforGem::Newfor.read(M_CHR2)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["æ", "æ", "æ"]
+    convert_to_special_chars(M_CHR2).must_equal ["æ", "æ", "æ"]
   end
  
   it "must return Ñ" do
-    obj = NewforGem::Newfor.read(M_CHR3)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["Ñ"]
+    convert_to_special_chars(M_CHR3).must_equal ["Ñ"]
   end
  
   it "must return Ñ" do
-    obj = NewforGem::Newfor.read(M_CHR4)
-    chr_array = Packet26.read(obj.rows[0].text)
-    chr_array.special_chars.must_equal ["€", "Ñ", "Ç"]
+    convert_to_special_chars(M_CHR4).must_equal ["€", "Ñ", "Ç"]
+  end
+
+  it 'must return correct spanish str' do
+    skip("have to work out the addess issue first")
+    obj = NewforGem::Newfor.read(TEST_2)
+    obj.clean("FR").to_json.must_match(/\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"Kjhadfgjklhadklfg kajdfgkjahd\",\"fgklha dfklgjhakdljf gkjadfÇÑ€.\"\]}/)
+  end
+
+  it 'must return correct spanish str' do
+     obj = NewforGem::Newfor.read(M_CHR4)
+     obj.clean("ES").to_json.must_match(/\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"Kjhadfgjklhadklfg kajdfgkjahd\",\"fgklha dfklgjhakdljf gkjadfÇÑ€.\"\]}/)
   end
 end
