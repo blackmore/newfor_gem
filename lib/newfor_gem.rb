@@ -1,4 +1,4 @@
-require "newfor_gem/newfor"
+require 'newfor_gem/newfor'
 
 module NewforGem
 
