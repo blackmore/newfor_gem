@@ -134,5 +134,46 @@ module Hamming
 		0x00000000, 0x00000800, 0x00001000, 0x00002000, 0x00004000, 0x00008000, 0x00010000, 0x00020000,
 		0x80000000, 0x80000000, 0x80000000, 0x80000000, 0x80000000, 0x80000000, 0x80000000, 0x80000000
 	]
+	# row number \x02\x64
+	# puts UNHAM_8_4[0x64].to_s(2)
+	# puts UNHAM_8_4[0x02].to_s(2)
+	# puts (UNHAM_8_4[0x02] | UNHAM_8_4[0x38]).to_s(2)
+	# // variable names conform to ETS 300 706, chapter 7.1.2
+	# uint8_t address = (unham_8_4(packet->address[1]) << 4) | unham_8_4(packet->address[0]);
+	# uint8_t m = address & 0x7;
+	# if (m == 0) m = 8;
+	# uint8_t y = (address >> 3) & 0x1f;
+# 	// ETS 300 706, chapter 8.2
+# uint8_t unham_8_4(uint8_t a) {
+# 	uint8_t r = UNHAM_8_4[a];
+# 	if (r == 0xff) {
+# 		VERBOSE_ONLY fprintf(stderr, "! Unrecoverable data error; UNHAM8/4(%02x)\n", a);
+# 	}
+# 	return (r & 0x0f);
+# } \x02\x0c
+# \x02\x38
+#DATE[02, 38       yr 12: mr 1
+#2 02 64 y 2: m 4  yr 8: mr 1
+#3 02 49 y 2: m 2  yr 4: mr 1
+#4 02 15 y 2: m 0  yr 0: mr 1
+#5 15 7d y 1: m 6  yr 28: mr 0
+#6 15 21 y 1: m 4  yr 24: mr 0
+	# puts PARITY_8[0x0f].to_s(2)
+	# def unham_8_4(a)
+	# 	r = UNHAM_8_4[a]
+	# 	if r == 0xff
+	# 		puts "ERROR"
+	# 	end
+	# 	r & 0x0f
+	# end 
+	# #puts UNHAM_8_4[0x64].to_s(2)
+	# puts address = (unham_8_4(0x02) << 4) | (unham_8_4(0x0c))
+	# puts address.to_s(2)
+
+	# puts "y #{(address >> 3) & 0x1f}: m #{address & 0x7}"
+	#  # puts (0xA1 >> 2) & 0x1f
+	# puts (UNHAM_8_4[0x7d] & 0x07) # get number of rows 
+
+
 end
 
