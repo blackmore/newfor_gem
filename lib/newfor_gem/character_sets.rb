@@ -65,7 +65,7 @@
 # ]
 # */
 
-module CharacterSets
+module NewforGem
 
 	# G0 charsets
 G0 = [

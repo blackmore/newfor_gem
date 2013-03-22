@@ -4,23 +4,44 @@ require 'minitest/autorun'
 
 require 'json'
 require 'newfor_gem'
-# require 'newfor_gem/newfor'
+require 'newfor_gem/newfor'
+#require 'newfor'
 
-describe NewforGem do
+describe NewforGem::Newfor do
 	CLEAR = "\x18"
 	BUILD = "\x0F\x0C\x02\x64\x20\x20\x0D\x07\x0B\x0B\x31\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6A\x6B\x6C\x6D\x6E\x6F\x70\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7A\x0A\x0A\x20\x20\x20\x20\x20\x02\x38\x20\x20\x0D\x07\x0B\x0B\x32\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4A\x4B\x4C\x4D\x4E\x4F\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5A\x2E\x0A\x0A\x20\x20\x20\x20"
+  PX_26 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x1e\xbd\xd0\x25\x6d\x43\x3e\xd1\x4e\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x53\x31\x34\x20\xa0\x20\xa0\x20\xa0\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20" 
+
+
+	build_obj = NewforGem::Newfor.read(BUILD)
+	clear_obj = NewforGem::Newfor.read(CLEAR)
+	px_26_obj = NewforGem::Newfor.read(PX_26)
+  nf_obj = NewforGem::Newfor.new
 
 	it "must return first byte in package" do
-    obj = NewforGem::Newfor.read(CLEAR)
-    obj.must_equal 0x18
+    clear_obj[:package_type].must_equal 0x18
   end
 
- #  it "must retrun subtitle info" do
- #  	NewforGem::Newfor.read(BUILD)['subte_info'].must_equal 0x0c
- #  end
+  it "must retrun subtitle info" do
+  	build_obj[:package_info].must_equal 0x0c
+  end
 
- #  it "must retrun subtitle info" do
- #  	obj = NewforGem::Newfor.read(BUILD)
- #  	obj.subte_info.must_equal 6
- #  end
+  it "must retrun number of rows = 2" do
+  	build_obj.number_of_rows.must_equal 2
+  end
+
+  it "must retrun length of x26" do
+  	px_26_obj.row[0].x26.length.must_equal 13
+  end
+
+  it "must retrun length of x26" do
+    px_26_obj.decode_triplits[0].must_equal [62, 4, 0, true]
+  end
+  
+  it "must retrun length of x26" do
+    px_26_obj.decode_triplits.must_equal "hello"
+  end
+
+
+
 end
