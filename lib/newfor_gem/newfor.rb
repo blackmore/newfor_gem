@@ -4,22 +4,25 @@ require 'newfor_gem/character_sets'
 
 module NewforGem
 	class Newfor < BinData::Record
-		X26 = "\x02\x0c"
+
 		# subtitle package structure
 		# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		uint8 :package_type
 		uint8 :package_info, :onlyif => :build?
 
-	  	array :row, :initial_length => :number_of_rows, :onlyif => :build? do
-      		string :subt_info, :read_length => 2
-      		uint8 :not_used, :onlyif => lambda { subt_info == X26 }
-       		array :x26, :initial_length => 13, :onlyif => lambda { subt_info == X26 } do
-        		uint8 :address
-        		uint8 :mode
-        		uint8 :data
-        end
-      	string :text, :read_length => 40, :onlyif => lambda { subt_info != X26 }
-    end
+	  	array :packet, :initial_length => :number_of_rows, :onlyif => :build? do
+	  		uint8 :address0
+	  		uint8 :address1
+      		uint8 :not_used, :onlyif => lambda { address1 == 12 }
+       		array :x26, :initial_length => 13, :onlyif => lambda { address1 == 12 } do
+        		uint8 :data0
+        		uint8 :data1
+        		uint8 :data2
+        	end
+        	array :text, :initial_length => 40, :onlyif => lambda { address1 != 12 } do
+        		uint8 :col
+        	end
+    	end
 		# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 		
 		def build?
@@ -29,7 +32,7 @@ module NewforGem
 		def number_of_rows
 			UNHAM_8_4[package_info] & 0x07
 		end
-
+		
 		def unham_24_18(a)
 			b0 = a & 0xff
 			b1 = (a >> 8) & 0xff
@@ -44,37 +47,75 @@ module NewforGem
 			d ^ UNHAM_24_18_ERR[abcdef]
 		end
 
-		# def map_chars
-		# 	# A - Z
-		# 	if ((data >= 65) && (data <= 90)) page_buffer.text[x26_row][x26_col] = G2_ACCENTS[mode - 0x11][data - 65];
-		# 		// a - z
-		# 		else if ((data >= 97) && (data <= 122)) page_buffer.text[x26_row][x26_col] = G2_ACCENTS[mode - 0x11][data - 71];
-		# 		// other
-		# 		else page_buffer.text[x26_row][x26_col] = telx_to_ucs2(data);
-		# end
+		def col_stop(row)
+			row.index(0x0a) - 1
+		end
 
-		def decode_triplits
-			triplits = []
-			row[0].x26.each do |triplit|
-				j = unham_24_18((triplit.data << 16) | (triplit.mode << 8) | triplit.address)
+		def col_start(row)
+			row.rindex(0x0b) + 1
+		end
+
+		def package26?(packet)
+			packet.address1 == 12
+		end
+
+		def packet_to_utf8
+			@@final_packet = []
+			packet.each do |p|
+				unless package26?(p)
+					row = []
+					p.text.each{|x| row << x}
+					(col_start(row)..col_stop(row)).each do |number|
+						row[number] = EN[row[number] - 32]
+					end
+					@@final_packet << row
+				end
+			end
+			replace_special_chr if package26?(packet[0])
+			@@final_packet
+		end
+
+		def replace_special_chr
+			x26_row = 0
+			x26_col = 0
+
+			packet[0].x26.each do |triplit|
+				j = unham_24_18((triplit.data2 << 16) | (triplit.data1 << 8) | triplit.data0)
 				data = (j & 0x3f800) >> 11
 				mode = (j & 0x7c0) >> 6
-				address = j & 0x3f
-				row_address_group = (address >= 40) && (address <= 63)
-				
-				if row_address_group
-					triplits << [row_address_group, address]
-					#puts [row_address_group, address, mode, data]
-				else
-					triplits << [row_address_group, address, (mode - 0x11), (data - 65)]
+				x26_col = j & 0x3f
+				row_address_group = (x26_col >= 40) && (x26_col <= 63)
+
+        # ETS 300 706, chapter 12.3.1, table 27: set active position
+        if (mode == 0x04) && (row_address_group)
+          case x26_col
+          when 58
+            x26_row = 0
+          when 58
+            x26_row = 1
+          end
+          next 
+        end
+
+				# ETS 300 706, chapter 12.3.1, table 27: character from G2 set
+				if (mode == 0x0f) && !row_address_group
+					if data > 31
+						@@final_packet[x26_row][x26_col] = G2[data - 0x20]
+					end
 				end
-				# if row_address_group
-				# 	triplits << [row_address_group, "row"]
-				# else
-				# 	# triplits << [row_address_group, address, G2_ACCENTS[mode - 0x11][data]]
-				# end
+
+				# // ETS 300 706, chapter 12.3.1, table 27: G0 character with diacritical mark
+				if (mode >= 0x11) && (mode <= 0x1f) && !row_address_group
+
+					# A - Z
+					if (data >= 65) && (data <= 90)
+						@@final_packet[x26_row][x26_col] = G2_ACCENTS[mode - 0x11][data - 65]
+					# a - z
+					elsif (data >= 97) && (data <= 122)
+						@@final_packet[x26_row][x26_col] = G2_ACCENTS[mode - 0x11][data - 71]
+					end
+				end
 			end
-			triplits
 		end
 
 	end

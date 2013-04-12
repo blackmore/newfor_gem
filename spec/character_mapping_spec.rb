@@ -2,8 +2,10 @@
 require 'minitest/spec'
 require 'minitest/autorun'
 
-require "json"
-require "newfor_gem"
+require 'json'
+require 'newfor_gem'
+require 'newfor_gem/newfor'
+require 'newfor_gem/hamming'
 
 describe "character mapping" do
   # Chr_1 = À
@@ -38,7 +40,7 @@ describe "character mapping" do
   Chr_25 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x40\xe1\x55\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x74\x68\x69\x73\x20\x69\x73\x20\x32\x35\x55\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
   M_CHR1 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x18\xbd\xd6\x1f\xbd\x56\x2b\xbd\xd6\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x45\x45\x45\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
   M_CHR2 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x12\xbd\xf1\x15\xbd\x71\x21\xbd\xf1\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x61\x61\x61\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
-  M_CHR3 = "\x0f\x0c\x02\x0c\x15\x53\x93\x80\x5f\xd1\xce\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x49\x20\x0d\x07\x0b\x0b\x53\x33\x20\x51\x57\x45\x52\x54\x59\x55\x49\x4f\x50\x41\x53\x44\x46\x47\x48\x4a\x4b\x4c\xa0\x5a\x58\x43\x56\x42\x4e\x4d\x0a\x0a\x20\x20\x20"
+  M_CHR3 = "\x0f\x0c\x02\x0c\x15\x53\x93\x80\x5f\xd1\xce\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x49\x20\x0d\x07\x0b\x0b\x53\x33\x20\x51\x57\x45\x52\x54\x59\x55\x49\x4f\x50\x41\x53\x44\x46\x47\x48\x4a\x4b\x4c\xa0\x5a\x58\x43\x56\x42\x4e\x4d\x0a\x0a\x20\x20\x20"  
   M_CHR4 = "\x0f\x1b\x02\x0c\x15\x79\x93\x00\x77\x6d\xc3\x09\xd2\xce\x05\xbe\xd6\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x64\x0d\x07\x0b\x0b\x4b\x6a\x68\x61\x64\x66\x67\x6a\x6b\x6c\x68\x61\x64\x6b\x6c\x66\x67\x20\x6b\x61\x6a\x64\x66\x67\x6b\x6a\x61\x68\x64\x0a\x0a\x20\x20\x20\x20\x20\x02\x38\x0d\x07\x0b\x0b\x66\x67\x6b\x6c\x68\x61\x20\x64\x66\x6b\x6c\x67\x6a\x68\x61\x6b\x64\x6c\x6a\x66\x20\x67\x6b\x6a\x61\x64\x66\xa0\xa0\xa0\x2e\x0a\x0a\x20\x20\x20"
   TEST_1 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x4d\xbd\xd6\x59\xbd\xf1\x5c\x61\xc9\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x74\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\x45\x61\x49\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20"
   TEST_2 = "\x0f\x0c\x02\x0c\x15\x79\x93\x00\x4d\xbd\xd6\x59\xbd\xf1\x5c\x61\xc9\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\xff\x80\x74\x7f\xff\x02\x38\x20\x20\x20\x20\x20\x20\x0d\x07\x0b\x0b\x74\x68\x69\x73\x20\x69\x73\x20\x61\x20\x74\x65\x73\x74\x20\xa0\xa0\xa0\x2e\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20"
@@ -49,108 +51,82 @@ describe "character mapping" do
 #   Use below to find the modifier and character number of a new
 #   special character.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#  o = NewforGem::Newfor.read(Chr_7)
-#  r = Packet26.read(o.rows[0].text)
-# 
-#  it "returns modifier and character dec" do
-#    r.char_array[0][:modifier].must_equal "modifier"
-#  end
-# 
-#  it "returns modifier and character dec" do
-#    r.char_array[0][:character].must_equal "character"
-#  end
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  def convert_to_special_chars(str)
-    obj = NewforGem::Newfor.read(str)
-    Packet26.read(obj.rows[0].text).special_chars
+  def obj(j)
+    NewforGem::Newfor.read(j)
   end
 
-  it "must return the letter Ï" do
-    convert_to_special_chars(Chr_15).must_equal ["Ï"]
-  end
- 
-  it "must return the letter Ü" do
-    convert_to_special_chars(Chr_25).must_equal ["Ü"]
-  end
- 
-  it "must return the letter Ô" do
-    convert_to_special_chars(Chr_17).must_equal ["Ô"]
-  end
- 
-  it "must return the letter Û" do
-    convert_to_special_chars(Chr_23).must_equal ["Û"]
-  end
- 
-  it "must return the letter Î" do
-    convert_to_special_chars(Chr_13).must_equal ["Î"]
-  end
- 
-  it "must return the letter Â" do
-    convert_to_special_chars(Chr_3).must_equal ["Â"]
-  end
- 
-  it "must return the letter À" do
-    convert_to_special_chars(Chr_1).must_equal ["À"]
-  end
- 
-  it "must return the letter È" do
-    convert_to_special_chars(Chr_11).must_equal ["È"]
-  end
- 
-  it "must return the letter Ù" do
-    convert_to_special_chars(Chr_21).must_equal ["Ù"]
-  end
- 
-  it "must return the letter É" do
-    convert_to_special_chars(Chr_9).must_equal ["É"]
-  end
- 
-  it "must return the letter Æ" do
-    convert_to_special_chars(Chr_5).must_equal ["Æ"]
-  end
- 
-  it "must return the letter æ" do
-    convert_to_special_chars(Chr_6).must_equal ["æ"]
-  end
- 
-  it "must return the letter Ç" do
-    convert_to_special_chars(Chr_7).must_equal ["Ç"]
+  it "must retrun Chr_1 = À at position 24" do
+    obj(Chr_1).packet_to_utf8[0][24].must_equal "À"
   end
 
-  it "must return the letter Œ" do
-    convert_to_special_chars(Chr_19).must_equal ["Œ"]
-  end
- 
-  it "must return the letter œ" do
-    convert_to_special_chars(Chr_20).must_equal ["œ"]
-  end
- 
-  it "must return €€€" do
-    convert_to_special_chars(M_CHR1).must_equal ["€", "€", "€"]
-  end
- 
-  it "must return æ æ æ" do
-    convert_to_special_chars(M_CHR2).must_equal ["æ", "æ", "æ"]
-  end
- 
-  it "must return Ñ" do
-    convert_to_special_chars(M_CHR3).must_equal ["Ñ"]
-  end
- 
-  it "must return Ñ" do
-    convert_to_special_chars(M_CHR4).must_equal ["€", "Ñ", "Ç"]
+  it "must retrun Chr_3 = Â at position 24" do
+    obj(Chr_3).packet_to_utf8[0][24].must_equal "Â"
   end
 
-  it 'must return correct spanish str' do
-    skip("have to work out the addess issue first")
-    obj = NewforGem::Newfor.read(TEST_2)
-    obj.clean("FR").to_json.must_match(/\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"Kjhadfgjklhadklfg kajdfgkjahd\",\"fgklha dfklgjhakdljf gkjadfÇÑ€.\"\]}/)
+  it "must retrun Chr_5 = Æ at position 24" do
+    obj(Chr_5).packet_to_utf8[0][24].must_equal "Æ"
   end
 
-  it 'must return correct spanish str' do
-     obj = NewforGem::Newfor.read(M_CHR4)
-     obj.clean("ES").to_json.must_match(/\{\"timestamp\":\"\d\d:\d\d:\d\d:\d\d\d\",\"code\":\"build\",\"rows\":\[\"Kjhadfgjklhadklfg kajdfgkjahd\",\"fgklha dfklgjhakdljf gkjadfÇÑ€.\"\]}/)
+  it "must retrun Chr_6 = æ at position 24" do
+    obj(Chr_6).packet_to_utf8[0][24].must_equal "æ"
   end
+
+  it "must retrun Chr_7 = Ç at position 24" do
+    obj(Chr_7).packet_to_utf8[0][24].must_equal "Ç"
+  end
+
+  it "must retrun Chr_9 = É at position 24" do
+    obj(Chr_9).packet_to_utf8[0][24].must_equal "É"
+  end
+
+  it "must retrun Chr_11 = È at position 24" do
+    obj(Chr_11).packet_to_utf8[0][24].must_equal "È"
+  end
+
+  it "must retrun Chr_13 = Î at position 24" do
+    obj(Chr_13).packet_to_utf8[0][24].must_equal "Î"
+  end
+
+  it "must retrun Chr_15 = Ï at position 24" do
+    obj(Chr_15).packet_to_utf8[0][24].must_equal "Ï"
+  end
+
+  it "must retrun Chr_17 = Ô at position 24" do
+    obj(Chr_17).packet_to_utf8[0][24].must_equal "Ô"
+  end
+
+  it "must retrun Chr_19 = Œ at position 24" do
+    obj(Chr_19).packet_to_utf8[0][24].must_equal "Œ"
+  end
+
+  it "must retrun Chr_20 = œ at position 24" do
+    obj(Chr_20).packet_to_utf8[0][24].must_equal "œ"
+  end
+
+  it "must retrun Chr_21 = Ù at position 24" do
+    obj(Chr_21).packet_to_utf8[0][24].must_equal "Ù"
+  end
+
+  it "must retrun Chr_23 = Û at position 24" do
+    obj(Chr_23).packet_to_utf8[0][24].must_equal "Û"
+  end
+
+  it "must retrun Chr_25 = Ü at position 24" do
+    obj(Chr_25).packet_to_utf8[0][24].must_equal "Ü"
+  end
+
+  it "must retrun Euro at position 24" do
+    obj(M_CHR1).packet_to_utf8[0][18..20].must_equal ["€", "€", "€"]
+  end
+
+  it "must retrun Euro at position 24" do
+    obj(M_CHR2).packet_to_utf8[0][18..20].must_equal ["æ", "æ", "æ"]
+  end
+
+  it "must retrun Euro at position 24" do
+    obj(M_CHR4).packet_to_utf8[0][31..33].must_equal ["Ç", "Ñ", "€"]
+  end
+
+
+
 end
