@@ -25,8 +25,8 @@ module NewforGem
 
 
   def self.parse(data, *codepage)
-    lang = codepage[0] ||= "EN" # Default to english
+    lang = EN #||= "EN" # Default to english
     obj = Newfor.read(ensure_odd_parity(data))
-    obj.clean(lang)
+    obj.packet_to_utf8(lang)
   end
 end

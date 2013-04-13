@@ -127,6 +127,4 @@ describe "character mapping" do
     obj(M_CHR4).packet_to_utf8[0][31..33].must_equal ["Ç", "Ñ", "€"]
   end
 
-
-
 end

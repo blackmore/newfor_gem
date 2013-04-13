@@ -28,20 +28,5 @@ describe NewforGem do
   end
 end
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-describe Packet26 do
-    
-  it "should return the number of rows" do
-    obj = NewforGem::Newfor.read(PACKET_26)
-    obj.number_of_rows.must_equal 2
-  end
-
-  it "row infor must include 0c to indicate its a package26 row" do
-    obj = NewforGem::Newfor.read(PACKET_26)
-    obj.rows[0].row_info.must_include "\x0c"
-  end
-end
-
 
 
