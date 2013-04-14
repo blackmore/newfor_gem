@@ -13,6 +13,7 @@ describe NewforGem do
 
   it "must do something" do
     op = NewforGem.parse(ES_PKT_S2, "ES")
+    op.must_match "thsi"
     # op['rows'][0].must_match(/\"<span class='txt-color-7'>S2 qwertyuiopasdfghjkl\u00F4zxcvbnm<\/span>\"/)
   end
 end

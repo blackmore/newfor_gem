@@ -46,6 +46,11 @@ module NewforGem
 			packet.address1 == 12
 		end
 
+		def timestamp
+			t = Time.now
+			t.strftime("%H:%M:%S:%3N")
+		end
+
 		def language(lang)
 			case lang
 				when /EN/
@@ -79,6 +84,7 @@ module NewforGem
 
 		def packet_to_utf8
 			@final_packet = []
+			@lang ||= EN
 
 			packet.each do |p|
 				row = []
@@ -149,11 +155,6 @@ module NewforGem
 				end
 			end
 			html_text
-		end
-
-		def timestamp
-			t = Time.now
-			t.strftime("%H:%M:%S:%3N")
 		end
 
 		def process_package(lang)
