@@ -3,8 +3,8 @@ require 'newfor_gem/newfor'
 module NewforGem
 
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	# 	small bit of code to ensure that all dat going through the gem 
-	# 	is set to non pirity
+	# 	small bit of code to ensure that all data going through the gem 
+	# 	is to non parity encoded
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   def self.ensure_odd_parity(data)
     none_parity = ""
@@ -24,9 +24,9 @@ module NewforGem
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-  def self.parse(data, *codepage)
-    lang = EN #||= "EN" # Default to english
+  def self.parse(data, *lang)
+    lang[0] ||= "EN" # Default to english
     obj = Newfor.read(ensure_odd_parity(data))
-    obj.packet_to_utf8(lang)
+    obj.process_package(lang[0])
   end
 end

@@ -46,33 +46,7 @@ describe NewforGem::Newfor do
   end
 
   it "will replace the special chars in the package" do
-      skip
-        x26_row = 0
-        x26_col = 0
-
-        #\x0f\x0c\x02\x0c\x15\x53\x93\x80
-        #\x0f\x1b\x02\x0c\x15\x79\x93\x00
-        data0 = 0x79
-        data1 = 0x93
-        data2 = 0x00
-        j = nf_obj.unham_24_18((data2 << 16) | (data1 << 8) | data0)
-        data = (j & 0x3f800) >> 11
-        mode = (j & 0x7c0) >> 6
-        address = j & 0x3f
-        row_address_group = (address >= 40) && (address <= 63)
-
-        # ETS 300 706, chapter 12.3.1, table 27: set active position
-        if (mode == 0x04) && (row_address_group)
-          case address
-          when 58
-            x26_row = 0
-          when 58
-            x26_row = 1
-          end
-        end
-        mode.must_equal 0x04
-        address.must_equal 62
-        x26_row.must_equal 0
+    es_obj.packet_to_utf8.must_equal "htis"
   end
 
 
