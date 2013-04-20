@@ -47,13 +47,13 @@ describe NewforGem::Newfor do
 
   it "must return the chrs for German" do
     obj = NewforGem.parse(GERMAN_BUILD, "DE")
-    obj['rows'][0].must_include "Ü"
+    obj['rows'][0]['text'].must_include "Ü"
   end
 
   it "wont include Ü but will default to EN »" do
     obj = NewforGem.parse(GERMAN_BUILD)
-    obj['rows'][0].wont_include "Ü"
-    obj['rows'][0].must_include "»"
+    obj['rows'][0]['text'].wont_include "Ü"
+    obj['rows'][0]['text'].must_include "»"
   end
 
 end

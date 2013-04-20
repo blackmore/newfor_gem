@@ -146,11 +146,15 @@ module NewforGem
     def colour_and_stuff
       html_text = []
       @final_packet.each do |row|
+        row_hash = {}
         col_start = col_start(row)
         col_stop = col_stop(row)
         (0..col_start(row) - 1).each do |number|
           if row[number] <= 0x07
-            html_text << "<span class='txt-color-#{row[number]}'>#{row[col_start..col_stop].join}</span>"
+            row_hash['bground'] = nil # to add at a later date
+            row_hash['fground'] = row[number]
+            row_hash['text'] = row[col_start..col_stop].join
+            html_text << row_hash
           end
         end
       end
@@ -165,7 +169,7 @@ module NewforGem
           @lang = language(lang)
           packet_to_utf8
           sub_hash['code'] = "build"
-          sub_hash['rows'] = colour_and_stuff
+          sub_hash['rows'] = colour_and_stuff # have to rename this method
         when 0x16 # reveal
           sub_hash['code'] = "reveal"
         when 0x18 # clear
