@@ -4,7 +4,7 @@
 
 Add this line to your application's Gemfile:
 
-    gem 'newfor_gem', :git => 'https://github.com/blackmore/newfor_gem.git'
+    gem "newfor_gem", :git => 'https://github.com/blackmore/newfor_gem.git', :tag => "vX.X.X"
 
 And then execute:
 
@@ -12,7 +12,7 @@ And then execute:
 
 ## Usage
 
-TODO: Write usage instructions here
+NOTE: Since v0.6.3 the rows package is now a has and is not compatible with earlier versions of clients javascript.
 
 ## Contributing
 
