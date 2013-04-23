@@ -151,8 +151,8 @@ module NewforGem
         col_stop = col_stop(row)
         (0..col_start(row) - 1).each do |number|
           if row[number] <= 0x07
-            row_hash['bground'] = nil # to add at a later date
-            row_hash['fground'] = row[number]
+            row_hash['bgcolor'] = nil # to add at a later date
+            row_hash['fgcolor'] = row[number]
             row_hash['text'] = row[col_start..col_stop].join
             html_text << row_hash
           end
