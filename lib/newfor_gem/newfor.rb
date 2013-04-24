@@ -115,11 +115,17 @@ module NewforGem
 
         # ETS 300 706, chapter 12.3.1, table 27: set active position
         if (mode == 0x04) && (row_address_group)
-          case x26_col
-            when 58
-              x26_row = 0
-            when 58
-              x26_row = 1
+          x26_row = case x26_col
+            when 62
+              @final_packet.length - 1
+            when 60
+              @final_packet.length - 2
+            when 56
+              @final_packet.length - 3
+            when 54
+              @final_packet.length - 4
+            when 52
+              @final_packet.length - 5
             end
           next 
         end

@@ -119,12 +119,12 @@ describe "character mapping" do
     obj(M_CHR1).packet_to_utf8[0][18..20].must_equal ["€", "€", "€"]
   end
 
-  it "must retrun Euro at position 24" do
+  it "must retrun French chrs at position 24" do
     obj(M_CHR2).packet_to_utf8[0][18..20].must_equal ["æ", "æ", "æ"]
   end
 
-  it "must retrun Euro at position 24" do
-    obj(M_CHR4).packet_to_utf8[0][31..33].must_equal ["Ç", "Ñ", "€"]
+  it "must retrun mixed chrs at position 24" do
+    obj(M_CHR4).packet_to_utf8[1][31..33].must_equal ["Ç", "Ñ", "€"]
   end
 
 end
