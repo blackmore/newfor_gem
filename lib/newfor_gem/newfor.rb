@@ -35,7 +35,8 @@ module NewforGem
     end
 
     def col_stop(row)
-      row.index(0x0a) - 1
+      chr = row.index(0x0a)
+      chr ? chr - 1 : 39
     end
 
     def col_start(row)
