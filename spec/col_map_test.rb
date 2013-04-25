@@ -8,7 +8,6 @@ module NewforGem
   end
 
     def self.do_address
-      #variable names conform to ETS 300 706, chapter 7.1.2
       address = (unham_8_4(0x21) << 4) | unham_8_4(0x15)
       puts "y: #{(address >> 3) & 0x1f}"
     end

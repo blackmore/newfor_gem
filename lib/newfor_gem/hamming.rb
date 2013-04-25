@@ -2,6 +2,10 @@
 # (c) 2011-2013 Petr Kutalek, Forers, s. r. o.: telxcc
 
 module NewforGem
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	# map_row_address_to_array
+	ROW_MAP = {62 => 12, 60 => 8, 58 => 4, 56 => 0, 54 => 28, 52 => 24}
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	UNHAM_8_4 = [
 		0x01, 0xff, 0x01, 0x01, 0xff, 0x00, 0x01, 0xff, 0xff, 0x02, 0x01, 0xff, 0x0a, 0xff, 0xff, 0x07,

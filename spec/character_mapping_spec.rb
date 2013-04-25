@@ -56,75 +56,80 @@ describe "character mapping" do
   end
 
   it "must retrun Chr_1 = À at position 24" do
-    obj(Chr_1).packet_to_utf8[0][24].must_equal "À"
+    obj(Chr_1).packet_to_utf8[0]['row'][24].must_equal "À"
   end
 
   it "must retrun Chr_3 = Â at position 24" do
-    obj(Chr_3).packet_to_utf8[0][24].must_equal "Â"
+    obj(Chr_3).packet_to_utf8[0]['row'][24].must_equal "Â"
   end
 
   it "must retrun Chr_5 = Æ at position 24" do
-    obj(Chr_5).packet_to_utf8[0][24].must_equal "Æ"
+    obj(Chr_5).packet_to_utf8[0]['row'][24].must_equal "Æ"
   end
 
   it "must retrun Chr_6 = æ at position 24" do
-    obj(Chr_6).packet_to_utf8[0][24].must_equal "æ"
+    obj(Chr_6).packet_to_utf8[0]['row'][24].must_equal "æ"
   end
 
   it "must retrun Chr_7 = Ç at position 24" do
-    obj(Chr_7).packet_to_utf8[0][24].must_equal "Ç"
+    obj(Chr_7).packet_to_utf8[0]['row'][24].must_equal "Ç"
   end
 
   it "must retrun Chr_9 = É at position 24" do
-    obj(Chr_9).packet_to_utf8[0][24].must_equal "É"
+    obj(Chr_9).packet_to_utf8[0]['row'][24].must_equal "É"
   end
 
   it "must retrun Chr_11 = È at position 24" do
-    obj(Chr_11).packet_to_utf8[0][24].must_equal "È"
+    obj(Chr_11).packet_to_utf8[0]['row'][24].must_equal "È"
   end
 
   it "must retrun Chr_13 = Î at position 24" do
-    obj(Chr_13).packet_to_utf8[0][24].must_equal "Î"
+    obj(Chr_13).packet_to_utf8[0]['row'][24].must_equal "Î"
   end
 
   it "must retrun Chr_15 = Ï at position 24" do
-    obj(Chr_15).packet_to_utf8[0][24].must_equal "Ï"
+    obj(Chr_15).packet_to_utf8[0]['row'][24].must_equal "Ï"
   end
 
   it "must retrun Chr_17 = Ô at position 24" do
-    obj(Chr_17).packet_to_utf8[0][24].must_equal "Ô"
+    obj(Chr_17).packet_to_utf8[0]['row'][24].must_equal "Ô"
   end
 
   it "must retrun Chr_19 = Œ at position 24" do
-    obj(Chr_19).packet_to_utf8[0][24].must_equal "Œ"
+    obj(Chr_19).packet_to_utf8[0]['row'][24].must_equal "Œ"
   end
 
   it "must retrun Chr_20 = œ at position 24" do
-    obj(Chr_20).packet_to_utf8[0][24].must_equal "œ"
+    obj(Chr_20).packet_to_utf8[0]['row'][24].must_equal "œ"
   end
 
   it "must retrun Chr_21 = Ù at position 24" do
-    obj(Chr_21).packet_to_utf8[0][24].must_equal "Ù"
+    obj(Chr_21).packet_to_utf8[0]['row'][24].must_equal "Ù"
   end
 
   it "must retrun Chr_23 = Û at position 24" do
-    obj(Chr_23).packet_to_utf8[0][24].must_equal "Û"
+    obj(Chr_23).packet_to_utf8[0]['row'][24].must_equal "Û"
   end
 
   it "must retrun Chr_25 = Ü at position 24" do
-    obj(Chr_25).packet_to_utf8[0][24].must_equal "Ü"
+    obj(Chr_25).packet_to_utf8[0]['row'][24].must_equal "Ü"
+    #obj(Chr_25).packet_to_utf8[0].must_equal "Ü"
   end
 
   it "must retrun Euro at position 24" do
-    obj(M_CHR1).packet_to_utf8[0][18..20].must_equal ["€", "€", "€"]
+    #skip
+    obj(M_CHR1).packet_to_utf8[0]['row'][18..20].must_equal ["€", "€", "€"]
   end
 
   it "must retrun French chrs at position 24" do
-    obj(M_CHR2).packet_to_utf8[0][18..20].must_equal ["æ", "æ", "æ"]
+    #skip
+    obj(M_CHR2).packet_to_utf8[0]['row'][18..20].must_equal ["æ", "æ", "æ"]
   end
 
   it "must retrun mixed chrs at position 24" do
-    obj(M_CHR4).packet_to_utf8[1][31..33].must_equal ["Ç", "Ñ", "€"]
+    #skip
+    obj(M_CHR4).packet_to_utf8[1]['row'][31..33].must_equal ["Ç", "Ñ", "€"]
+    #obj(M_CHR4).packet_to_utf8.must_equal ["Ç", "Ñ", "€"]
   end
 
 end

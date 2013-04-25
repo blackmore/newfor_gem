@@ -68,7 +68,7 @@ module NewforGem
           ES
       end
     end
-    
+
     def unham_24_18(a)
       b0 = a & 0xff
       b1 = (a >> 8) & 0xff
@@ -83,18 +83,39 @@ module NewforGem
       d ^ UNHAM_24_18_ERR[abcdef]
     end
 
+    def unham_8_4(a)
+      UNHAM_8_4[a] & 0x0f
+    end
+
+    def row_address(p)
+      address = (unham_8_4(p.address1) << 4) | unham_8_4(p.address0)
+      (address >> 3) & 0x1f
+    end
+
+    def map_row_address_to_array(r)
+      @final_packet.each_index do |i|
+        return i if @final_packet[i]['row_address'] == ROW_MAP[r]
+      end
+      nil
+    end
+
     def packet_to_utf8
       @final_packet = []
       @lang ||= EN
 
       packet.each do |p|
+        package = {}
         row = []
+        #packet_hash {}
+        # y = row_address(p)
         unless x26?(p)
           p.text.each{|x| row << x}
           (col_start(row)..col_stop(row)).each do |number|
             row[number] = @lang[row[number] - 32]
           end
-          @final_packet << row
+          package['row_address'] = row_address(p)
+          package['row'] = row
+          @final_packet << package
         end
       end
 
@@ -115,25 +136,14 @@ module NewforGem
 
         # ETS 300 706, chapter 12.3.1, table 27: set active position
         if (mode == 0x04) && (row_address_group)
-          x26_row = case x26_col
-            when 62
-              @final_packet.length - 1
-            when 60
-              @final_packet.length - 2
-            when 56
-              @final_packet.length - 3
-            when 54
-              @final_packet.length - 4
-            when 52
-              @final_packet.length - 5
-            end
+          x26_row = map_row_address_to_array(x26_col)
           next 
         end
 
         # ETS 300 706, chapter 12.3.1, table 27: character from G2 set
         if (mode == 0x0f) && (!row_address_group)
           if data > 31
-            @final_packet[x26_row][x26_col] = G2[data - 0x20]
+            @final_packet[x26_row]['row'][x26_col] = G2[data - 0x20]
           end
         end
 
@@ -141,10 +151,10 @@ module NewforGem
         if (mode >= 0x11) && (mode <= 0x1f) && (!row_address_group)
           # A - Z
           if (data >= 65) && (data <= 90)
-            @final_packet[x26_row][x26_col] = G2_ACCENTS[mode - 0x11][data - 65]
+            @final_packet[x26_row]['row'][x26_col] = G2_ACCENTS[mode - 0x11][data - 65]
           # a - z
           elsif (data >= 97) && (data <= 122)
-            @final_packet[x26_row][x26_col] = G2_ACCENTS[mode - 0x11][data - 71]
+            @final_packet[x26_row]['row'][x26_col] = G2_ACCENTS[mode - 0x11][data - 71]
           end
         end
       end
@@ -152,15 +162,15 @@ module NewforGem
 
     def colour_and_stuff
       html_text = []
-      @final_packet.each do |row|
+      @final_packet.each do |p|
         row_hash = {}
-        col_start = col_start(row)
-        col_stop = col_stop(row)
-        (0..col_start(row) - 1).each do |number|
-          if row[number] <= 0x07
+        col_start = col_start(p['row'])
+        col_stop = col_stop(p['row'])
+        (0..col_start(p['row']) - 1).each do |number|
+          if p['row'][number] <= 0x07
             row_hash['bgcolor'] = nil # to add at a later date
-            row_hash['fgcolor'] = row[number]
-            row_hash['text'] = row[col_start..col_stop].join
+            row_hash['fgcolor'] = p['row'][number]
+            row_hash['text'] = p['row'][col_start..col_stop].join
             html_text << row_hash
           end
         end
