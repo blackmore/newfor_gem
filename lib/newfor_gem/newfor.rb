@@ -168,6 +168,7 @@ module NewforGem
         col_stop = col_stop(p['row'])
         (0..col_start(p['row']) - 1).each do |number|
           if p['row'][number] <= 0x07
+            row_hash['bloffset'] = BASELINE[p['row_address']]
             row_hash['bgcolor'] = nil # to add at a later date
             row_hash['fgcolor'] = p['row'][number]
             row_hash['text'] = p['row'][col_start..col_stop].join

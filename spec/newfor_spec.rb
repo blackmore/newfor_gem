@@ -67,4 +67,14 @@ describe NewforGem::Newfor do
     obj['rows'][0]['text'].must_include "asjdhgfajsghdfjahsgdfjhsagdfjashdgfj"
   end
 
+  it "must give baseline + 0" do
+    obj = NewforGem.parse(LONG)
+    obj['rows'][0]['bloffset'].must_equal 0
+  end
+
+  it "must give baseline + 1" do
+    obj = NewforGem.parse(TWO_LINE)
+    obj['rows'][0]['bloffset'].must_equal 1
+  end
+
 end
