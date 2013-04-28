@@ -94,7 +94,7 @@ module NewforGem
 
     def map_row_address_to_array(r)
       @final_packet.each_index do |i|
-        return i if @final_packet[i]['row_address'] == ROW_MAP[r]
+        return i if @final_packet[i]['bloffset'] == BL_OFFSET[r]
       end
       nil
     end
@@ -113,7 +113,7 @@ module NewforGem
           (col_start(row)..col_stop(row)).each do |number|
             row[number] = @lang[row[number] - 32]
           end
-          package['row_address'] = row_address(p)
+          package['bloffset'] = BL_OFFSET[row_address(p)]
           package['row'] = row
           @final_packet << package
         end
@@ -168,7 +168,7 @@ module NewforGem
         col_stop = col_stop(p['row'])
         (0..col_start(p['row']) - 1).each do |number|
           if p['row'][number] <= 0x07
-            row_hash['bloffset'] = BASELINE[p['row_address']]
+            row_hash['bloffset'] = p['bloffset']
             row_hash['bgcolor'] = nil # to add at a later date
             row_hash['fgcolor'] = p['row'][number]
             row_hash['text'] = p['row'][col_start..col_stop].join
