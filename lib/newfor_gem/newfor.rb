@@ -94,7 +94,7 @@ module NewforGem
 
     def map_row_address_to_array(r)
       @final_packet.each_index do |i|
-        return i if @final_packet[i]['bloffset'] == BL_OFFSET[r]
+        return i if @final_packet[i][:bloffset] == BL_OFFSET[r]
       end
       nil
     end
@@ -113,8 +113,8 @@ module NewforGem
           (col_start(row)..col_stop(row)).each do |number|
             row[number] = @lang[row[number] - 32]
           end
-          package['bloffset'] = BL_OFFSET[row_address(p)]
-          package['row'] = row
+          package[:bloffset] = BL_OFFSET[row_address(p)]
+          package[:row] = row
           @final_packet << package
         end
       end
@@ -143,7 +143,7 @@ module NewforGem
         # ETS 300 706, chapter 12.3.1, table 27: character from G2 set
         if (mode == 0x0f) && (!row_address_group)
           if data > 31
-            @final_packet[x26_row]['row'][x26_col] = G2[data - 0x20]
+            @final_packet[x26_row][:row][x26_col] = G2[data - 0x20]
           end
         end
 
@@ -151,10 +151,10 @@ module NewforGem
         if (mode >= 0x11) && (mode <= 0x1f) && (!row_address_group)
           # A - Z
           if (data >= 65) && (data <= 90)
-            @final_packet[x26_row]['row'][x26_col] = G2_ACCENTS[mode - 0x11][data - 65]
+            @final_packet[x26_row][:row][x26_col] = G2_ACCENTS[mode - 0x11][data - 65]
           # a - z
           elsif (data >= 97) && (data <= 122)
-            @final_packet[x26_row]['row'][x26_col] = G2_ACCENTS[mode - 0x11][data - 71]
+            @final_packet[x26_row][:row][x26_col] = G2_ACCENTS[mode - 0x11][data - 71]
           end
         end
       end
@@ -164,14 +164,14 @@ module NewforGem
       html_text = []
       @final_packet.each do |p|
         row_hash = {}
-        col_start = col_start(p['row'])
-        col_stop = col_stop(p['row'])
-        (0..col_start(p['row']) - 1).each do |number|
-          if p['row'][number] <= 0x07
-            row_hash['bloffset'] = p['bloffset']
-            row_hash['bgcolor'] = nil # to add at a later date
-            row_hash['fgcolor'] = p['row'][number]
-            row_hash['text'] = p['row'][col_start..col_stop].join
+        col_start = col_start(p[:row])
+        col_stop = col_stop(p[:row])
+        (0..col_start(p[:row]) - 1).each do |number|
+          if p[:row][number] <= 0x07
+            row_hash[:bloffset] = p[:bloffset]
+            row_hash[:bgcolor] = nil # to add at a later date
+            row_hash[:fgcolor] = p[:row][number]
+            row_hash[:text] = p[:row][col_start..col_stop].join
             html_text << row_hash
           end
         end
@@ -181,19 +181,19 @@ module NewforGem
 
     def process_package(lang)
       sub_hash = {}
-      sub_hash['timestamp'] = timestamp
+      sub_hash[:timestamp] = timestamp
       case package_type
         when 0x0f # build
           @lang = language(lang)
           packet_to_utf8
-          sub_hash['code'] = "build"
-          sub_hash['rows'] = colour_and_stuff # have to rename this method
+          sub_hash[:code] = "build"
+          sub_hash[:rows] = colour_and_stuff # have to rename this method
         when 0x16 # reveal
-          sub_hash['code'] = "reveal"
+          sub_hash[:code] = "reveal"
         when 0x18 # clear
-          sub_hash['code'] = "clear"
+          sub_hash[:code] = "clear"
         when 0x0E # disconnect
-          sub_hash['code'] = "connect_disconnect"
+          sub_hash[:code] = "connect_disconnect"
       end
       sub_hash
     end
