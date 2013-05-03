@@ -170,7 +170,7 @@ module NewforGem
           if p[:row][number] <= 0x07
             row_hash[:bloffset] = p[:bloffset]
             row_hash[:bgcolor] = 0 # to add at a later date
-            row_hash[:fgcolor] = p[:row][number.to_i]
+            row_hash[:fgcolor] = p[:row][number].to_i
             row_hash[:text] = p[:row][col_start..col_stop].join
             html_text << row_hash
           end

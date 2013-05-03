@@ -89,4 +89,10 @@ describe NewforGem::Newfor do
     BL_OFFSET[60 - 0x30].must_equal 1
   end
 
+  it "fgcolor must equal 7 and be a Fixnum" do
+    obj = NewforGem.parse(TWO_LINE)
+    obj[:rows][0][:fgcolor].must_equal 7
+    obj[:rows][0][:fgcolor].must_be_instance_of Fixnum
+  end
+
 end
