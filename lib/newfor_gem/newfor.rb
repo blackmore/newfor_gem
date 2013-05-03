@@ -48,8 +48,7 @@ module NewforGem
     end
 
     def timestamp
-      t = Time.now
-      t.strftime("%H:%M:%S:%3N")
+      Time.now.to_f
     end
 
     def language(lang)
