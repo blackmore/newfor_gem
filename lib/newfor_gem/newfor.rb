@@ -160,7 +160,7 @@ module NewforGem
       end
     end
 
-    def colour_and_stuff
+    def prosess_row_data
       html_text = []
       @final_packet.each do |p|
         row_hash = {}
@@ -169,8 +169,8 @@ module NewforGem
         (0..col_start(p[:row]) - 1).each do |number|
           if p[:row][number] <= 0x07
             row_hash[:bloffset] = p[:bloffset]
-            row_hash[:bgcolor] = nil # to add at a later date
-            row_hash[:fgcolor] = p[:row][number]
+            row_hash[:bgcolor] = 0 # to add at a later date
+            row_hash[:fgcolor] = p[:row][number.to_i]
             row_hash[:text] = p[:row][col_start..col_stop].join
             html_text << row_hash
           end
@@ -187,7 +187,7 @@ module NewforGem
           @lang = language(lang)
           packet_to_utf8
           sub_hash[:code] = "build"
-          sub_hash[:rows] = colour_and_stuff # have to rename this method
+          sub_hash[:rows] = prosess_row_data
         when 0x16 # reveal
           sub_hash[:code] = "reveal"
         when 0x18 # clear
