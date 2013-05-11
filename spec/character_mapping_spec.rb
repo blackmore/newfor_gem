@@ -115,7 +115,6 @@ describe "character mapping" do
 
   it "must retrun Chr_25 = Ü at position 24" do
     obj(Chr_25).packet_to_utf8[0][:row][24].must_equal "Ü"
-    #obj(Chr_25).packet_to_utf8[0].must_equal "Ü"
   end
 
   it "must retrun Euro at position 24" do

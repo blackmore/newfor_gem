@@ -105,8 +105,6 @@ module NewforGem
       packet.each do |p|
         package = {}
         row = []
-        #packet_hash {}
-        # y = row_address(p)
         unless x26?(p)
           p.text.each{|x| row << x}
           (col_start(row)..col_stop(row)).each do |number|
@@ -160,7 +158,7 @@ module NewforGem
     end
 
     def prosess_row_data
-      html_text = []
+      text = []
       @final_packet.each do |p|
         row_hash = {}
         col_start = col_start(p[:row])
@@ -171,11 +169,11 @@ module NewforGem
             row_hash[:bgcolor] = 0 # to add at a later date
             row_hash[:fgcolor] = p[:row][number].to_i
             row_hash[:text] = p[:row][col_start..col_stop].join
-            html_text << row_hash
+            text << row_hash
           end
         end
       end
-      html_text
+      text
     end
 
     def process_package(lang)
@@ -186,7 +184,7 @@ module NewforGem
           @lang = language(lang)
           packet_to_utf8
           sub_hash[:code] = "build"
-          sub_hash[:rows] = prosess_row_data
+          sub_hash[:row] = prosess_row_data
         when 0x16 # reveal
           sub_hash[:code] = "reveal"
         when 0x18 # clear

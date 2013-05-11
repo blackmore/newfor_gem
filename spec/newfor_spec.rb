@@ -30,15 +30,15 @@ describe NewforGem::Newfor do
     read_obj(CLEAR)[:package_type].must_equal 0x18
     obj = parse_obj(CLEAR)
     obj[:code].must_equal "clear"
-    obj[:rows].must_be_nil
+    obj[:row].must_be_nil
   end
 
   it "must return a Build package type with two text lines" do
   	read_obj(BUILD)[:package_info].must_equal 0x0c
     obj = parse_obj(BUILD)
     obj[:code].must_equal "build"
-    obj[:rows].must_be_instance_of Array
-    obj[:rows].length.must_equal 2
+    obj[:row].must_be_instance_of Array
+    obj[:row].length.must_equal 2
   end
 
   it "must retrun length of x26 and mst be 13" do
@@ -48,13 +48,13 @@ describe NewforGem::Newfor do
 
   it "must return the chrs for German" do
     obj = NewforGem.parse(GERMAN_BUILD, "DE")
-    obj[:rows][0][:text].must_include "Ü"
+    obj[:row][0][:text].must_include "Ü"
   end
 
   it "wont include Ü but will default to EN »" do
     obj = NewforGem.parse(GERMAN_BUILD)
-    obj[:rows][0][:text].wont_include "Ü"
-    obj[:rows][0][:text].must_include "»"
+    obj[:row][0][:text].wont_include "Ü"
+    obj[:row][0][:text].must_include "»"
   end
 
   it "must parse a long line" do
@@ -64,17 +64,17 @@ describe NewforGem::Newfor do
 
   it "must parse a long line" do
     obj = NewforGem.parse(LONG)
-    obj[:rows][0][:text].must_include "asjdhgfajsghdfjahsgdfjhsagdfjashdgfj"
+    obj[:row][0][:text].must_include "asjdhgfajsghdfjahsgdfjhsagdfjashdgfj"
   end
 
   it "must give baseline + 0" do
     obj = NewforGem.parse(LONG)
-    obj[:rows][0][:bloffset].must_equal 0
+    obj[:row][0][:bloffset].must_equal 0
   end
 
   it "must give baseline + 1" do
     obj = NewforGem.parse(TWO_LINE)
-    obj[:rows][0][:bloffset].must_equal 1
+    obj[:row][0][:bloffset].must_equal 1
   end
     BL_OFFSET = [
     0xff, 0xff, 0xff, 0xff, 0x05, 0xff, 0x04, 0xff, 0x03, 0xff, 0x02, 0xff, 0x01, 0xff, 0x00, 0xff,
@@ -91,8 +91,8 @@ describe NewforGem::Newfor do
 
   it "fgcolor must equal 7 and be a Fixnum" do
     obj = NewforGem.parse(TWO_LINE)
-    obj[:rows][0][:fgcolor].must_equal 7
-    obj[:rows][0][:fgcolor].must_be_instance_of Fixnum
+    obj[:row][0][:fgcolor].must_equal 7
+    obj[:row][0][:fgcolor].must_be_instance_of Fixnum
   end
 
 end
