@@ -17,6 +17,7 @@ describe NewforGem::Newfor do
   KLIVE        = "\x8f\x02\x02\x38\x0d\x07\x0b\x0b\x61\x6e\x73\xf7\xe5\xf2\x20\xf4\xef\x20\xf4\x68\xe9\x73\xae\x20\xd0\x68\xe9\xec\x8a\x8a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x10"
   TWO_LINE     = "\x0f\x49\x02\x64\x0d\x07\x0b\x0b\x41\x6c\x6c\x20\x77\x6f\x72\x6b\x20\x61\x6e\x64\x20\x6e\x6f\x20\x70\x6c\x61\x79\x20\x6d\x61\x6b\x65\x73\x20\x4a\x61\x63\x6b\x20\x61\x0a\x0a\x20\x02\x38\x0d\x07\x0b\x0b\x64\x75\x6c\x6c\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
   LONG         = "\x0f\x47\x02\x38\x0d\x06\x0b\x0b\x61\x73\x6a\x64\x68\x67\x66\x61\x6a\x73\x67\x68\x64\x66\x6a\x61\x68\x73\x67\x64\x66\x6a\x68\x73\x61\x67\x64\x66\x6a\x61\x73\x68\x64\x67\x66\x6a"
+  IN_COLOUR    = "\x0f\x49\x02\x64\x0d\x07\x0b\x0b\x41\x6c\x6c\x65\x6e\x20\x6e\x6f\x77\x20\x72\x65\x70\x6f\x72\x74\x73\x2e\x03\x53\x70\x65\x63\x74\x61\x63\x75\x6c\x61\x72\x2c\x0a\x0a\x20\x20\x20\x02\x38\x0d\x03\x0b\x0b\x69\x73\x6e\x27\x74\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20"
 
   def read_obj(j)
     NewforGem::Newfor.read(j)
@@ -48,13 +49,13 @@ describe NewforGem::Newfor do
 
   it "must return the chrs for German" do
     obj = NewforGem.parse(GERMAN_BUILD, "DE")
-    obj[:row][0][:text].must_include "Ü"
+    obj[:row][0][:content][0][:txt].must_include "Ü"
   end
 
   it "wont include Ü but will default to EN »" do
     obj = NewforGem.parse(GERMAN_BUILD)
-    obj[:row][0][:text].wont_include "Ü"
-    obj[:row][0][:text].must_include "»"
+    obj[:row][0][:content][0][:txt].wont_include "Ü"
+    obj[:row][0][:content][0][:txt].must_include "»"
   end
 
   it "must parse a long line" do
@@ -64,7 +65,15 @@ describe NewforGem::Newfor do
 
   it "must parse a long line" do
     obj = NewforGem.parse(LONG)
-    obj[:row][0][:text].must_include "asjdhgfajsghdfjahsgdfjhsagdfjashdgfj"
+    obj[:row][0][:content][0][:txt].must_include "asjdhgfajsghdfjahsgdfjhsagdfjashdgfj"
+  end
+
+  it "must split the rows into contect arrays" do
+    obj = NewforGem.parse(IN_COLOUR)
+    obj[:row][0][:content][1][:txt].must_equal " Spectacular,"
+    obj[:row][0][:content][0][:txt].must_equal "Allen now reports."
+    obj[:row][0][:content][0][:fgcolor].must_equal 7
+    obj[:row][0][:content][1][:fgcolor].must_equal 3
   end
 
   it "must give baseline + 0" do
@@ -76,7 +85,8 @@ describe NewforGem::Newfor do
     obj = NewforGem.parse(TWO_LINE)
     obj[:row][0][:bloffset].must_equal 1
   end
-    BL_OFFSET = [
+  
+  BL_OFFSET = [
     0xff, 0xff, 0xff, 0xff, 0x05, 0xff, 0x04, 0xff, 0x03, 0xff, 0x02, 0xff, 0x01, 0xff, 0x00, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -91,8 +101,8 @@ describe NewforGem::Newfor do
 
   it "fgcolor must equal 7 and be a Fixnum" do
     obj = NewforGem.parse(TWO_LINE)
-    obj[:row][0][:fgcolor].must_equal 7
-    obj[:row][0][:fgcolor].must_be_instance_of Fixnum
+    obj[:row][0][:content][0][:fgcolor].must_equal 7
+    obj[:row][0][:content][0][:fgcolor].must_be_instance_of BinData::Uint8
   end
 
 end

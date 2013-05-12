@@ -51,7 +51,7 @@ module NewforGem
       Time.now.to_f
     end
 
-    def language(lang)
+    def lang_to_iso(lang)
       case lang
         when /EN/
           EN
@@ -65,6 +65,8 @@ module NewforGem
           SW
         when /ES|PT/
           ES
+        else # Default to English
+          EN
       end
     end
 
@@ -92,32 +94,32 @@ module NewforGem
     end
 
     def map_row_address_to_array(r)
-      @final_packet.each_index do |i|
-        return i if @final_packet[i][:bloffset] == BL_OFFSET[r]
+      @utf8_packet.each_index do |i|
+        return i if @utf8_packet[i][:bloffset] == BL_OFFSET[r]
       end
       nil
     end
 
-    def packet_to_utf8
-      @final_packet = []
-      @lang ||= EN
+    def packet_to_utf8(iso)
+      @utf8_packet = []
+
 
       packet.each do |p|
-        package = {}
-        row = []
-        unless x26?(p)
-          p.text.each{|x| row << x}
-          (col_start(row)..col_stop(row)).each do |number|
-            row[number] = @lang[row[number] - 32]
-          end
-          package[:bloffset] = BL_OFFSET[row_address(p)]
-          package[:row] = row
-          @final_packet << package
+        next if x26?(p)
+        package = {:row => []}
+        package[:bloffset] = BL_OFFSET[row_address(p)]
+        p.text.each{|x| package[:row] << x}
+
+        (col_start(package[:row])..col_stop(package[:row])).each do |number|
+          next unless package[:row][number] > 0x07
+          package[:row][number] = iso[package[:row][number] - 32]
         end
+
+        @utf8_packet << package
       end
 
       process_x26 if x26?(packet[0])
-      @final_packet
+      @utf8_packet
     end
 
     def process_x26
@@ -140,7 +142,7 @@ module NewforGem
         # ETS 300 706, chapter 12.3.1, table 27: character from G2 set
         if (mode == 0x0f) && (!row_address_group)
           if data > 31
-            @final_packet[x26_row][:row][x26_col] = G2[data - 0x20]
+            @utf8_packet[x26_row][:row][x26_col] = G2[data - 0x20]
           end
         end
 
@@ -148,43 +150,57 @@ module NewforGem
         if (mode >= 0x11) && (mode <= 0x1f) && (!row_address_group)
           # A - Z
           if (data >= 65) && (data <= 90)
-            @final_packet[x26_row][:row][x26_col] = G2_ACCENTS[mode - 0x11][data - 65]
+            @utf8_packet[x26_row][:row][x26_col] = G2_ACCENTS[mode - 0x11][data - 65]
           # a - z
           elsif (data >= 97) && (data <= 122)
-            @final_packet[x26_row][:row][x26_col] = G2_ACCENTS[mode - 0x11][data - 71]
+            @utf8_packet[x26_row][:row][x26_col] = G2_ACCENTS[mode - 0x11][data - 71]
           end
         end
       end
     end
 
-    def prosess_row_data
-      text = []
-      @final_packet.each do |p|
-        row_hash = {}
-        col_start = col_start(p[:row])
-        col_stop = col_stop(p[:row])
-        (0..col_start(p[:row]) - 1).each do |number|
-          if p[:row][number] <= 0x07
-            row_hash[:bloffset] = p[:bloffset]
-            row_hash[:bgcolor] = 0 # to add at a later date
-            row_hash[:fgcolor] = p[:row][number].to_i
-            row_hash[:text] = p[:row][col_start..col_stop].join
-            text << row_hash
-          end
+    def row_to_json(row)
+      col_start = col_start(row)
+      col_stop = col_stop(row)
+      text = {}
+      content = []
+
+      (0..col_start - 1).each do |n|
+        if row[n] <= 0x07
+          text[:fgcolor] = row[n]
+          text[:bgcolor] = 0
+          text[:txt] = ""
         end
       end
-      text
+
+      (col_start..col_stop).each do |n|
+        if row[n].class == String
+          text[:txt] << row[n]
+          next
+        elsif row[n] <= 0x07
+          content << text.clone
+          text[:fgcolor] = row[n]
+          text[:bgcolor] = 0
+          text[:txt] = " " # added space to takenup by the colour
+        end
+      end
+      content << text
     end
 
-    def process_package(lang)
-      sub_hash = {}
-      sub_hash[:timestamp] = timestamp
+    def process_package(language)
+      sub_hash = {:timestamp => timestamp}
       case package_type
         when 0x0f # build
-          @lang = language(lang)
-          packet_to_utf8
+          iso = lang_to_iso(language)
+          sub_hash[:row] = []
           sub_hash[:code] = "build"
-          sub_hash[:row] = prosess_row_data
+          packet_to_utf8(iso).each do |n|
+            row = {
+              :bloffset => n[:bloffset],
+              :content => row_to_json(n[:row])
+              }
+            sub_hash[:row] << row
+          end
         when 0x16 # reveal
           sub_hash[:code] = "reveal"
         when 0x18 # clear
