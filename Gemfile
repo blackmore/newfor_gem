@@ -6,6 +6,9 @@ group :development do
   gem 'guard-minitest'
   gem 'terminal-notifier-guard'
   gem "turn"
+
 end
+
+gem 'simplecov', :require => false, :group => :test
 
 gemspec 
