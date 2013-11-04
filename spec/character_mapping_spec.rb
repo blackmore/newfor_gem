@@ -1,13 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'minitest/spec'
-require 'minitest/autorun'
-require 'turn/autorun'
-Turn.config.format = :cool
-
-require 'json'
-require 'newfor_gem'
-require 'newfor_gem/newfor'
-require 'newfor_gem/hamming'
+require 'spec_helper'
 
 describe "character mapping" do
   # Chr_1 = À

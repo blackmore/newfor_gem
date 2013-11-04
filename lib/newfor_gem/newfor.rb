@@ -53,8 +53,6 @@ module NewforGem
 
     def lang_to_iso(lang)
       case lang
-        when /EN/
-          EN
         when /IT/
           IT
         when /FR/
